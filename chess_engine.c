@@ -34,7 +34,72 @@ void print_bitboard(U64 bitboard)
         printf("\n");
     }
 }
+void fen_to_bitboard(char *fen)
+{
+    int rank = 7, file = 0, i = 0;
+    while (fen[i] != '\0')
+    {
+        if (fen[i] >= '1' && fen[i] <= '8')
+        {
+            file += fen[i] - '0'; // skip empty squares
+        }
+        else if (fen[i] == '/')
+        {
+            rank--;
+            file = 0;
+        }
+        else
+        {
+            int index = rank * 8 + file;
+            switch (fen[i])
+            {
+            case 'P':
+                white_pawns |= (1ULL << index);
+                break;
+            case 'B':
+                white_bishops |= (1ULL << index);
+                break;
+            case 'N':
+                white_knights |= (1ULL << index);
+                break;
+            case 'R':
+                white_rooks |= (1ULL << index);
+                break;
+            case 'Q':
+                white_queens |= (1ULL << index);
+                break;
+            case 'K':
+                white_king |= (1ULL << index);
+                break;
+            case 'p':
+                black_pawns |= (1ULL << index);
+                break;
+            case 'b':
+                black_bishops |= (1ULL << index);
+                break;
+            case 'n':
+                black_knights |= (1ULL << index);
+                break;
+            case 'r':
+                black_rooks |= (1ULL << index);
+                break;
+            case 'q':
+                black_queens |= (1ULL << index);
+                break;
+            case 'k':
+                black_king |= (1ULL << index);
+                break;
+            default:
+                break;
+            }
+            file++;
+        }
+        i++;
+    }
+}
 
 int main(int argc, char *argv[])
 {
+    // setup board
+    fen_to_bitboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 }
