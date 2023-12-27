@@ -4,6 +4,7 @@
 // define macros
 #define get_bit(bitboard, square) ((bitboard) & (1ULL << (square)))
 #define set_bit(bitboard, square) ((bitboard) |= (1ULL << (square)))
+#define clear_bit(bitboard, square) ((bitboard) &= ~(1ULL << (square)))
 
 // define types
 typedef unsigned long long U64;
