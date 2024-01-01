@@ -23,6 +23,7 @@ U64 black_rooks;
 U64 black_queens;
 U64 black_king;
 
+#define get_bit(bitboard, square) ((bitboard) & (1ULL << (square)))
 void print_bitboard(U64 bitboard)
 {
     for (int i = 0; i < 8; i++)
@@ -98,6 +99,26 @@ void fen_to_bitboard(char *fen)
         }
         i++;
     }
+}
+
+int static_evaluation(U64 white_pawns, U64 white_bishops, U64 white_knights, U64 white_rooks, U64 white_queens, U64 white_king, U64 black_pawns, U64 black_bishops, U64 black_knights, U64 black_rooks, U64 black_queens, U64 black_king)
+{
+    int score = 0;
+    score += __builtin_popcountll(white_pawns) * 100;
+    score += __builtin_popcountll(white_bishops) * 300;
+    score += __builtin_popcountll(white_knights) * 300;
+    score += __builtin_popcountll(white_rooks) * 500;
+    score += __builtin_popcountll(white_queens) * 900;
+    score += __builtin_popcountll(white_king) * 10000;
+
+    score -= __builtin_popcountll(black_pawns) * 100;
+    score -= __builtin_popcountll(black_bishops) * 300;
+    score -= __builtin_popcountll(black_knights) * 300;
+    score -= __builtin_popcountll(black_rooks) * 500;
+    score -= __builtin_popcountll(black_queens) * 900;
+    score -= __builtin_popcountll(black_king) * 10000;
+
+    return score;
 }
 
 int main(int argc, char *argv[])
