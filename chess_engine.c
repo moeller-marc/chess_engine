@@ -1,6 +1,14 @@
 // import libraries
 #include <stdio.h>
 
+// define constants
+#define pawn_value 100
+#define bishop_value 350
+#define knight_value 300
+#define rook_value 500
+#define queen_value 900
+#define king_value 10000000
+
 // define macros
 #define get_bit(bitboard, square) ((bitboard) & (1ULL << (square)))
 #define set_bit(bitboard, square) ((bitboard) |= (1ULL << (square)))
@@ -104,19 +112,19 @@ void fen_to_bitboard(char *fen)
 int static_evaluation(U64 white_pawns, U64 white_bishops, U64 white_knights, U64 white_rooks, U64 white_queens, U64 white_king, U64 black_pawns, U64 black_bishops, U64 black_knights, U64 black_rooks, U64 black_queens, U64 black_king)
 {
     int score = 0;
-    score += __builtin_popcountll(white_pawns) * 100;
-    score += __builtin_popcountll(white_bishops) * 300;
-    score += __builtin_popcountll(white_knights) * 300;
-    score += __builtin_popcountll(white_rooks) * 500;
-    score += __builtin_popcountll(white_queens) * 900;
-    score += __builtin_popcountll(white_king) * 10000000000;
+    score += __builtin_popcountll(white_pawns) * pawn_value;
+    score += __builtin_popcountll(white_bishops) * bishop_value;
+    score += __builtin_popcountll(white_knights) * knight_value;
+    score += __builtin_popcountll(white_rooks) * rook_value;
+    score += __builtin_popcountll(white_queens) * queen_value;
+    score += __builtin_popcountll(white_king) * king_value;
 
-    score -= __builtin_popcountll(black_pawns) * 100;
-    score -= __builtin_popcountll(black_bishops) * 300;
-    score -= __builtin_popcountll(black_knights) * 300;
-    score -= __builtin_popcountll(black_rooks) * 500;
-    score -= __builtin_popcountll(black_queens) * 900;
-    score -= __builtin_popcountll(black_king) * 10000000000;
+    score -= __builtin_popcountll(black_pawns) * pawn_value;
+    score -= __builtin_popcountll(black_bishops) * bishop_value;
+    score -= __builtin_popcountll(black_knights) * knight_value;
+    score -= __builtin_popcountll(black_rooks) * rook_value;
+    score -= __builtin_popcountll(black_queens) * queen_value;
+    score -= __builtin_popcountll(black_king) * king_value;
 
     return score;
 }
