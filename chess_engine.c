@@ -1,6 +1,21 @@
 // import libraries
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <math.h>
+#include <time.h>
+#include <stdint.h>
 
+// define types
+typedef unsigned long long U64;
+
+// define enums
+enum colour
+{
+    WHITE,
+    BLACK
+};
 // define constants
 #define pawn_value 100
 #define bishop_value 350
@@ -9,13 +24,29 @@
 #define queen_value 900
 #define king_value 10000000
 
+U64 file_a = 0x0101010101010101Ull;
+U64 file_b = 0x0202020202020202Ull;
+U64 file_c = 0x0404040404040404Ull;
+U64 file_d = 0x0808080808080808Ull;
+U64 file_e = 0x1010101010101010Ull;
+U64 file_f = 0x2020202020202020Ull;
+U64 file_g = 0x4040404040404040Ull;
+U64 file_h = 0x8080808080808080Ull;
+
+U64 rank_1 = 0xFF;
+U64 rank_2 = 0xFF00;
+U64 rank_3 = 0xFF0000;
+U64 rank_4 = 0xFF000000;
+U64 rank_5 = 0xFF00000000;
+U64 rank_6 = 0xFF0000000000;
+U64 rank_7 = 0xFF000000000000;
+U64 rank_8 = 0xFF00000000000000;
+
 // define macros
 #define get_bit(bitboard, square) ((bitboard) & (1ULL << (square)))
 #define set_bit(bitboard, square) ((bitboard) |= (1ULL << (square)))
 #define clear_bit(bitboard, square) ((bitboard) &= ~(1ULL << (square)))
 
-// define types
-typedef unsigned long long U64;
 // the board
 U64 white_pawns;
 U64 white_bishops;
@@ -31,7 +62,6 @@ U64 black_rooks;
 U64 black_queens;
 U64 black_king;
 
-#define get_bit(bitboard, square) ((bitboard) & (1ULL << (square)))
 void print_bitboard(U64 bitboard)
 {
     for (int i = 0; i < 8; i++)
@@ -44,7 +74,12 @@ void print_bitboard(U64 bitboard)
         }
         printf("\n");
     }
+
+    printf("\n\n\n");
+    printf("%d\n", __builtin_popcountll(bitboard));
+    printf("%llu\n", bitboard);
 }
+
 void fen_to_bitboard(char *fen)
 {
     int rank = 7, file = 0, i = 0;
@@ -127,6 +162,41 @@ int static_evaluation(U64 white_pawns, U64 white_bishops, U64 white_knights, U64
     score -= __builtin_popcountll(black_king) * king_value;
 
     return score;
+}
+
+// attack tables, attack masks and magic bitboards
+
+// attack masks
+U64 generate_pawn_attack_mask(int colour, int square)
+{
+    U64 mask = 0ULL;
+    set_bit(mask, square);
+    if (colour == WHITE)
+    {
+        if (!(get_bit(file_a, square - 7))) // not on file a
+        {
+            set_bit(mask, square - 7);
+        }
+        if (!(get_bit(file_h, square - 9))) // not on file h
+        {
+            set_bit(mask, square - 9);
+        }
+    }
+    else
+    {
+        if (!(get_bit(file_h, square + 7))) // not on file h
+        {
+            printf("%d\n", !(get_bit(file_h, square + 7)));
+            set_bit(mask, square + 7);
+        }
+        if (!(get_bit(file_a, square + 9))) // not on file a
+        {
+            printf("%d\n", !(get_bit(file_a, square + 9)));
+            set_bit(mask, square + 9);
+            printf("%d\n", square + 9);
+        }
+    }
+    return mask;
 }
 
 int main(int argc, char *argv[])
