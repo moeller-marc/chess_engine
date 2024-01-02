@@ -358,6 +358,46 @@ U64 generate_queen_attack_mask(int square)
     return mask;
 }
 
+U64 generate_king_attack_mask(int square)
+{
+    U64 mask = 0ULL;
+    int rank = square / 8;
+    int file = square % 8;
+    if (rank + 1 < 8)
+    {
+        set_bit(mask, square + 8);
+    }
+    if (rank - 1 >= 0)
+    {
+        set_bit(mask, square - 8);
+    }
+    if (file + 1 < 8)
+    {
+        set_bit(mask, square + 1);
+    }
+    if (file - 1 >= 0)
+    {
+        set_bit(mask, square - 1);
+    }
+    if (rank + 1 < 8 && file + 1 < 8)
+    {
+        set_bit(mask, square + 9);
+    }
+    if (rank + 1 < 8 && file - 1 >= 0)
+    {
+        set_bit(mask, square + 7);
+    }
+    if (rank - 1 >= 0 && file + 1 < 8)
+    {
+        set_bit(mask, square - 7);
+    }
+    if (rank - 1 >= 0 && file - 1 >= 0)
+    {
+        set_bit(mask, square - 9);
+    }
+    return mask;
+}
+
 int main(int argc, char *argv[])
 {
     // setup board
