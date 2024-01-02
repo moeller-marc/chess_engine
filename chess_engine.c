@@ -170,7 +170,6 @@ int static_evaluation(U64 white_pawns, U64 white_bishops, U64 white_knights, U64
 U64 generate_pawn_attack_mask(int colour, int square)
 {
     U64 mask = 0ULL;
-    set_bit(mask, square);
     if (colour == WHITE)
     {
         if (!(get_bit(file_a, square - 7))) // not on file a
@@ -199,8 +198,41 @@ U64 generate_pawn_attack_mask(int colour, int square)
     return mask;
 }
 
+U64 generate_bishop_attack_mask(int square)
+{
+    U64 mask = 0ULL;
+    int rank = square / 8;
+    int file = square % 8;
+    int i = 1;
+    while (rank + i < 8 && file + i < 8)
+    {
+        set_bit(mask, square + i * 9);
+        i++;
+    }
+    i = 1;
+    while (rank - i >= 0 && file + i < 8)
+    {
+        set_bit(mask, square - i * 7);
+        i++;
+    }
+    i = 1;
+    while (rank + i < 8 && file - i >= 0)
+    {
+        set_bit(mask, square + i * 7);
+        i++;
+    }
+    i = 1;
+    while (rank - i >= 0 && file - i >= 0)
+    {
+        set_bit(mask, square - i * 9);
+        i++;
+    }
+    return mask;
+}
+
 int main(int argc, char *argv[])
 {
     // setup board
     fen_to_bitboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    print_bitboard(generate_bishop_attack_mask(28));
 }
