@@ -230,9 +230,48 @@ U64 generate_bishop_attack_mask(int square)
     return mask;
 }
 
+U64 generate_knight_attack_mask(int square)
+{
+    U64 mask = 0ULL;
+    int rank = square / 8;
+    int file = square % 8;
+    if (rank + 2 < 8 && file + 1 < 8)
+    {
+        set_bit(mask, square + 17);
+    }
+    if (rank + 2 < 8 && file - 1 >= 0)
+    {
+        set_bit(mask, square + 15);
+    }
+    if (rank - 2 >= 0 && file + 1 < 8)
+    {
+        set_bit(mask, square - 15);
+    }
+    if (rank - 2 >= 0 && file - 1 >= 0)
+    {
+        set_bit(mask, square - 17);
+    }
+    if (rank + 1 < 8 && file + 2 < 8)
+    {
+        set_bit(mask, square + 10);
+    }
+    if (rank + 1 < 8 && file - 2 >= 0)
+    {
+        set_bit(mask, square + 6);
+    }
+    if (rank - 1 >= 0 && file + 2 < 8)
+    {
+        set_bit(mask, square - 6);
+    }
+    if (rank - 1 >= 0 && file - 2 >= 0)
+    {
+        set_bit(mask, square - 10);
+    }
+    return mask;
+}
+
 int main(int argc, char *argv[])
 {
     // setup board
     fen_to_bitboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-    print_bitboard(generate_bishop_attack_mask(28));
 }
