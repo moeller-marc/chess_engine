@@ -302,6 +302,62 @@ U64 generate_rook_attack_mask(int square)
     return mask;
 }
 
+U64 generate_queen_attack_mask(int square)
+{
+    U64 mask = 0ULL;
+    int rank = square / 8;
+    int file = square % 8;
+    int i = 1;
+    while (rank + i < 8)
+    {
+        set_bit(mask, square + i * 8);
+        i++;
+    }
+    i = 1;
+    while (rank - i >= 0)
+    {
+        set_bit(mask, square - i * 8);
+        i++;
+    }
+    i = 1;
+    while (file + i < 8)
+    {
+        set_bit(mask, square + i);
+        i++;
+    }
+    i = 1;
+    while (file - i >= 0)
+    {
+        set_bit(mask, square - i);
+        i++;
+    }
+    i = 1;
+    while (rank + i < 8 && file + i < 8)
+    {
+        set_bit(mask, square + i * 9);
+        i++;
+    }
+    i = 1;
+    while (rank - i >= 0 && file + i < 8)
+    {
+        set_bit(mask, square - i * 7);
+        i++;
+    }
+    i = 1;
+    while (rank + i < 8 && file - i >= 0)
+    {
+        set_bit(mask, square + i * 7);
+        i++;
+    }
+    i = 1;
+    while (rank - i >= 0 && file - i >= 0)
+    {
+        set_bit(mask, square - i * 9);
+        i++;
+    }
+    return mask;
+}
+
 int main(int argc, char *argv[])
 {
     // setup board
