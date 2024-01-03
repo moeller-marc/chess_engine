@@ -24,23 +24,23 @@ enum colour
 #define queen_value 900
 #define king_value 10000000
 
-U64 file_a = 0x0101010101010101Ull;
-U64 file_b = 0x0202020202020202Ull;
-U64 file_c = 0x0404040404040404Ull;
-U64 file_d = 0x0808080808080808Ull;
-U64 file_e = 0x1010101010101010Ull;
-U64 file_f = 0x2020202020202020Ull;
-U64 file_g = 0x4040404040404040Ull;
-U64 file_h = 0x8080808080808080Ull;
+const U64 file_a = 0x0101010101010101Ull;
+const U64 file_b = 0x0202020202020202Ull;
+const U64 file_c = 0x0404040404040404Ull;
+const U64 file_d = 0x0808080808080808Ull;
+const U64 file_e = 0x1010101010101010Ull;
+const U64 file_f = 0x2020202020202020Ull;
+const U64 file_g = 0x4040404040404040Ull;
+const U64 file_h = 0x8080808080808080Ull;
 
-U64 rank_1 = 0xFF;
-U64 rank_2 = 0xFF00;
-U64 rank_3 = 0xFF0000;
-U64 rank_4 = 0xFF000000;
-U64 rank_5 = 0xFF00000000;
-U64 rank_6 = 0xFF0000000000;
-U64 rank_7 = 0xFF000000000000;
-U64 rank_8 = 0xFF00000000000000;
+const U64 rank_1 = 0xFF;
+const U64 rank_2 = 0xFF00;
+const U64 rank_3 = 0xFF0000;
+const U64 rank_4 = 0xFF000000;
+const U64 rank_5 = 0xFF00000000;
+const U64 rank_6 = 0xFF0000000000;
+const U64 rank_7 = 0xFF000000000000;
+const U64 rank_8 = 0xFF00000000000000;
 
 // define macros
 #define get_bit(bitboard, square) ((bitboard) & (1ULL << (square)))
@@ -78,6 +78,12 @@ void print_bitboard(U64 bitboard)
     printf("\n\n\n");
     printf("%d\n", __builtin_popcountll(bitboard));
     printf("%llu\n", bitboard);
+}
+
+// get least significant 1. bit
+static inline int get_lsb(U64 bitboard)
+{
+    return __builtin_ctzll(bitboard);
 }
 
 void fen_to_bitboard(char *fen)
@@ -398,8 +404,17 @@ U64 generate_king_attack_mask(int square)
     return mask;
 }
 
+// attack tables
+U64 pawn_attack_table[2][64];
+U64 bishop_attack_table[64];
+U64 knight_attack_table[64];
+U64 rook_attack_table[64];
+U64 queen_attack_table[64];
+U64 king_attack_table[64];
+
 int main(int argc, char *argv[])
 {
     // setup board
     fen_to_bitboard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    // print_bitboard(generate_bishop_attack_mask(0));
 }
